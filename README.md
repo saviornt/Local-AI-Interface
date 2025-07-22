@@ -119,7 +119,7 @@ I am exploring ways to expand the capabilities of the Local AI Interface. Here a
   - Perplexity
   - Anthropic
 
-These would eitherinvolve API key management and dedicated interfaces within the app, or just serving each as a webpage to the provider.
+These would either involve API key management and dedicated interfaces within the app, or just serving each as a webpage to the provider.
 
 ## Donating
 
