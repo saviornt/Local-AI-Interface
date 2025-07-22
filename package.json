@@ -1,0 +1,31 @@
+{
+  "name": "local-ai-interface",
+  "version": "1.0.0",
+  "main": "main.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "electron .",
+    "build": "electron-packager . local-ai-interface --overwrite --platform=win32 --arch=x64 --icon=./favicon.ico --out=dist --prune=true --version-string.CompanyName=\"SaviorNT\" --version-string.FileDescription=\"Local AI Interface\" --version-string.ProductName=\"Local AI Interface\" --version-string.ProductVersion=\"1.0.0\" --executableName=\"Local AI Interface\"",
+    "build-all": "docker compose -p ai-stack up -d && npm run build"
+  },
+  "keywords": [
+    "Electron",
+    "Open WebUI",
+    "Ollama",
+    "n8n",
+    "AI",
+    "Desktop App",
+    "AI Interfaces"
+  ],
+  "author": "SaviorNT",
+  "homepage": "https://github.com/saviornt/local-ai-interface",
+  "license": "MIT",
+  "description": "Desktop application built with Electron that provides a user interface for managing AI services like Ollama and n8n.",
+  "devDependencies": {
+    "electron": "^37.2.3",
+    "electron-packager": "^17.1.2"
+  },
+  "dependencies": {
+    "express": "^5.1.0"
+  }
+}

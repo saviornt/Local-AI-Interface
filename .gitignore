@@ -1,0 +1,29 @@
+# Node.js
+node_modules/
+npm-debug.log
+.env
+
+# Electron
+dist/
+release/
+*.asar
+*.asar.unpacked
+crash-dumps/
+
+# macOS
+.DS_Store
+
+# Windows
+Thumbs.db
+ehthumbs.db
+Desktop.ini
+
+# VS Code
+.vscode/
+
+# Docker
+.docker/
+*.log
+*.tmp
+*.bak
+*.swp

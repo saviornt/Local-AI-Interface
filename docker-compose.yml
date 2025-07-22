@@ -1,0 +1,86 @@
+services:
+  ollama:
+    # Use the official Ollama image
+    image: ollama/ollama
+    # Map port 11434 from the container to the host, allowing access to Ollama API
+    ports:
+      - "11434:11434"
+    # Mount a named volume to persist Ollama models and data
+    volumes:
+      - ollama_data:/root/.ollama
+    # Configure Docker to use the NVIDIA GPU(s)
+    deploy:
+      resources:
+        reservations:
+          devices:
+            - driver: nvidia
+              count: all # Use all available NVIDIA GPUs, or or specify a number (e.g., '1')
+              capabilities: [gpu]
+    # Ensure the container always restarts if it stops, or when Docker starts
+    restart: always
+    # Assign a specific container name for easier management
+    container_name: ollama
+
+  open-webui:
+    # Use the official Open WebUI image
+    image: ghcr.io/open-webui/open-webui:main
+    # Map port 8080 from the container to the host to access the web UI
+    ports:
+      - "8080:8080"
+    # Mount a named volume to persist Open WebUI data and configurations
+    volumes:
+      - openwebui_data:/app/backend/data
+    # Configure Docker to use the NVIDIA GPU(s) for Open WebUI
+    deploy:
+      resources:
+        reservations:
+          devices:
+            - driver: nvidia
+              count: all # Use all available NVIDIA GPUs, or specify a number (e.g., '1')
+              capabilities: [gpu]
+    # Ensure the container always restarts
+    restart: always
+    # Open WebUI needs to connect to the Ollama service.
+    # 'depends_on' ensures Ollama starts before Open WebUI.
+    depends_on:
+      - ollama
+    # Environment variable to point Open WebUI to the Ollama service.
+    # 'ollama' is the service name defined in this docker-compose file.
+    environment:
+      - OLLAMA_BASE_URL=http://ollama:11434
+    # Assign a specific container name
+    container_name: open-webui
+
+  n8n:
+    # Use the official n8n image
+    image: n8nio/n8n
+    # Map port 5678 from the container to the host
+    ports:
+      - "5678:5678"
+    # Mount a named volume to persist n8n data
+    volumes:
+      - n8n_data:/home/node/.n8n
+    # Ensure the container always restarts
+    restart: always
+    # Assign a specific container name
+    container_name: n8n
+    # Ensure n8n is accessible from the host and within the Docker network
+    environment:
+      - N8N_HOST=0.0.0.0
+      - N8N_PORT=5678
+      - N8N_PROTOCOL=http
+      - N8N_COMMUNITY_PACKAGES_ALLOW_TOOL_USAGE=true
+      - N8N_FRAME_OPTIONS=false
+      - N8N_CONTENT_SECURITY_POLICY_FRAME_ANCESTORS='*'
+      - N8N_EDITOR_BASE_URL=http://localhost:5678/ # <--- ADDED THIS LINE
+      - WEBHOOK_URL=http://localhost:5678/ # <--- ADDED THIS LINE
+    # Note: For production deployments accessible over the internet,
+    # setting N8N_FRAME_OPTIONS=false and N8N_CONTENT_SECURITY_POLICY_FRAME_ANCESTORS='*'
+    # is generally not recommended due to security implications (clickjacking).
+    # For a local desktop application, it's typically acceptable.
+
+# Define named volumes for data persistence
+volumes:
+  ollama_data:
+  openwebui_data:
+  n8n_data:
