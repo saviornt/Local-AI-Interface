@@ -27,3 +27,6 @@ Desktop.ini
 *.tmp
 *.bak
 *.swp
+
+# Github
+.github/

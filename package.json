@@ -3,9 +3,16 @@
   "version": "1.0.0",
   "main": "main.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
     "start": "electron .",
-    "build": "electron-packager . local-ai-interface --overwrite --platform=win32 --arch=x64 --icon=./favicon.ico --out=dist --prune=true --version-string.CompanyName=\"SaviorNT\" --version-string.FileDescription=\"Local AI Interface\" --version-string.ProductName=\"Local AI Interface\" --version-string.ProductVersion=\"1.0.0\" --executableName=\"Local AI Interface\"",
+
+    "build-win": "electron-packager . local-ai-interface --overwrite --platform=win32 --arch=x64 --icon=./icon.ico --out=dist --prune=true --version-string.CompanyName=\"YourCompany\" --version-string.FileDescription=\"AI Stack Desktop App\" --version-string.ProductName=\"AI Stack\" --executableName=\"Local AI Interface\"",
+    "build-mac": "electron-packager . local-ai-interface --overwrite --platform=darwin --arch=x64,arm64 --out=dist --prune=true --executableName=\"Local AI Interface\"",
+    "build-linux": "electron-packager . local-ai-interface --overwrite --platform=linux --arch=x64 --out=dist --prune=true --executableName=\"Local AI Interface\"",
+    "build": "electron-packager . local-ai-interface --overwrite --platform=current --arch=current --out=dist --prune=true --executableName=\"Local AI Interface\"",
+
+    "build-all-win": "docker compose -p ai-stack up -d && npm run build-windows",
+    "build-all-mac": "docker compose -p ai-stack up -d && npm run build-macos",
+    "build-all-linux": "docker compose -p ai-stack up -d && npm run build-linux",
     "build-all": "docker compose -p ai-stack up -d && npm run build"
   },
   "keywords": [

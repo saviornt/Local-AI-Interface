@@ -4,23 +4,18 @@ A desktop application built with Electron that provides a user-friendly interfac
 
 ## Features
 
-Unified Interface: Access Open WebUI (for Ollama) and n8n from a single desktop application.
-
-Dark Mode Toggle: Switch between light and dark themes for comfortable viewing.
-
-Persistent Theme: Your preferred theme mode is saved and loaded on next launch.
-
-Dockerized Services: All backend AI services run in isolated Docker containers, ensuring easy setup and management.
-
-One-Command Setup: A single command to get both Docker services running and the desktop application built.
+- Unified Interface: Access Open WebUI (for Ollama) and n8n from a single desktop application.
+- Dark Mode Toggle: Switch between light and dark themes for comfortable viewing.
+- Persistent Theme: Your preferred theme mode is saved and loaded on next launch.
+- Dockerized Services: All backend AI services run in isolated Docker containers, ensuring easy setup and management.
+- One-Command Setup: A single command to get both Docker services running and the desktop application built.
 
 ## Prerequisites
 
 Before you begin, ensure you have the following installed on your system:
 
-Docker Desktop: Includes Docker Engine and Docker Compose. Essential for running the AI services.
-
-Node.js: Includes npm (Node Package Manager). Required for building and running the Electron application. (LTS version recommended)
+- Docker Desktop: Includes Docker Engine and Docker Compose. Essential for running the AI services.
+- Node.js: Includes npm (Node Package Manager). Required for building and running the Electron application. (LTS version recommended)
 
 ## Getting Started
 
@@ -43,24 +38,30 @@ Follow these steps to set up and run your Local AI Interface:
 
 3. Build and Run Everything (One Command!):
 
+    ```bash
+    npm run build-all
+    ```
+
     This command will:
 
     - Start all necessary Docker containers (Ollama, Open WebUI, n8n) in the background.
     - Build the Electron desktop application.
 
-    ```bash
-    npm run build-all
-    ```
+    **Platform-Specific Builds:**
+    If you need to build for a specific platform, use one of the following commands:
+    - **Windows:** `npm run build-all-win`
+    - **macOS:** `npm run build-all-mac`
+    - **Linux:** `npm run build-all-linux`
 
     This process might take some time on the first run as Docker images are downloaded and Electron packages the application.
 
 4. Launch the Application:
 
-    Once `npm run build-all` completes, you will find the executable in the `dist/local-ai-interface-win32-x64/` directory (for Windows).
+    Once the build completes (e.g., `npm run build-all` or `npm run build-all-win`), you will find the executable in a subdirectory within the `dist/` folder (e.g., `dist/local-ai-interface-win32-x64/` for Windows).
 
-    - Navigate to this directory: `cd dist/local-ai-interface-win32-x64/`
-    - Run the executable: `.\Local AI Interface.exe`
-    - Alternatively, you can right-click on Local AI Interface.exe and select Send to > Desktop (create shortcut) for easy access.
+    - Navigate to the appropriate build directory: `cd dist/local-ai-interface-<platform>-<arch>/` (e.g., `cd dist/local-ai-interface-win32-x64/`)
+    - Run the executable: `.\Local AI Interface.exe` (on Windows) or `./Local AI Interface` (on macOS or Linux).
+    - Alternatively, you can right-click on executable and select `Send to > Desktop (create shortcut)` for easy access on Windows.
 
 ## Running in Development Mode
 
@@ -69,7 +70,7 @@ If you want to run the Electron app directly without building the full executabl
 1. Start Docker Services:
 
     ```bash
-    docker compose -p AI-Stack up -d
+    docker compose -p ai-stack up -d
     ```
 
 2. Start Electron App:
@@ -98,24 +99,38 @@ local-ai-interface/
 └── node_modules/             # Node.js dependencies (created after npm install)
 ```
 
+## Potential Features
+
+I am exploring ways to expand the capabilities of the Local AI Interface. Here are some features that could be integrated in future updates:
+
+- **Automatic1111 Integration:** Adding a tab and Docker Compose service for AUTOMATIC1111's Stable Diffusion WebUI to enable local image generation.
+- **ComfyUI Integration:** Including ComfyUI as another powerful local interface for Stable Diffusion workflows.
+- **Cloud-Hosted Service Integration:** Providing a seamless way to connect and interact with popular cloud-hosted AI services such as:
+  - ChatGPT
+  - Gemini
+  - Perplexity
+  - Anthropic
+
+These would eitherinvolve API key management and dedicated interfaces within the app, or just serving each as a webpage to the provider.
+
 ## Donating
 
-If you find this project useful and would like to support its continued development, please consider donating. Your contributions help maintain and improve this open-source initiative.
+If you find this project useful and would like to support its continued development, please consider donating. While this specific project might seem simple, your contributions are invaluable as they support many other, extremely challenging projects I'm working on. Your generosity is much, much appreciated!
 
 - [GitHub Sponsors: Support me monthly on GitHub.](https://github.com/sponsors/saviornt)
 - [Patreon: Become a patron to support this project and many others.](https://www.patreon.com/saviornt)
-- [Buy Me a Coffee: A simple way to offer a one-time donation.](https://www.buymeacoffee.com/saviornt)
+- [Buy Me a Coffee: A simple way to offer a one-time donation to show your appreciation.](https://www.buymeacoffee.com/saviornt)
 
 ## Troubleshooting
 
 - Docker Services Not Starting:
   - Ensure Docker Desktop is running.
   - Check for port conflicts (e.g., 8080, 5678, 11434, 3000).
-  - Review Docker logs: docker compose logs
+  - Review Docker logs: `docker compose logs`
 - Application Not Loading Content (Blank Screen / Errors):
-  - Ensure Docker services are running (docker ps).
-  - Open Electron's Developer Tools (Ctrl+Shift+I or Cmd+Option+I) and check the Console and Network tabs for errors.
-  - If Refused to frame or ERR_BLOCKED_BY_RESPONSE errors reappear, you might need to re-enable the commented-out security bypasses in main.js (see main.js comments for details).
+  - Ensure Docker services are running (`docker ps`).
+  - Open Electron's Developer Tools (`Ctrl+Shift+I` or `Cmd+Option+I`) and check the Console and Network tabs for errors.
+  - If `Refused to frame` or `ERR_BLOCKED_BY_RESPONSE` errors reappear, you might need to re-enable the commented-out security bypasses in `main.js` (see `main.js` comments for details).
 
 ## Contributing
 
