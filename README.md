@@ -1,6 +1,6 @@
 # Local AI Interface
 
-A desktop application built with Electron that provides a user-friendly interface for managing and interacting with local AI services, including Ollama (for Large Language Models) and n8n (for workflow automation). This project aims to simplify the setup and usage of a personal AI development stack.
+A desktop application built with Electron that provides a user-friendly interface for managing and interacting with local AI services, including Ollama (for Large Language Models) and n8n (for workflow automation). This project aims to simplify the setup and usage of a personal, local AI stack.
 
 ## Features
 
