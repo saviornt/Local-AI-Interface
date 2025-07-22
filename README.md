@@ -63,6 +63,14 @@ Follow these steps to set up and run your Local AI Interface:
     - Run the executable: `.\Local AI Interface.exe` (on Windows) or `./Local AI Interface` (on macOS or Linux).
     - Alternatively, you can right-click on executable and select `Send to > Desktop (create shortcut)` for easy access on Windows.
 
+   **Important Note for Unsigned Applications:**
+   As this application is not digitally signed (due to the cost of code signing certificates), your operating system (Windows or macOS) may display security warnings when you first download or attempt to run it.
+   - **On Windows:** You might see a "Windows protected your PC" (SmartScreen) warning. Click "More info" and then "Run anyway" to proceed.
+   - **On macOS:** You might see a warning stating the "developer cannot be verified." To open the app, go to System Settings > Privacy & Security > General, and then click "Open Anyway" next to the application's name.
+
+   These warnings are standard for unsigned software. I assure you the application is safe to use.
+   - Alternatively, you can right-click on the executable and select `Send to > Desktop (create shortcut)` for easy access on Windows.
+
 ## Running in Development Mode
 
 If you want to run the Electron app directly without building the full executable (useful for testing UI changes):
