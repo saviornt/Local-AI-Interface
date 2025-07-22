@@ -4,12 +4,10 @@
   "main": "main.js",
   "scripts": {
     "start": "electron .",
-
     "build-win": "electron-packager . local-ai-interface --overwrite --platform=win32 --arch=x64 --icon=./icon.ico --out=dist --prune=true --version-string.CompanyName=\"YourCompany\" --version-string.FileDescription=\"AI Stack Desktop App\" --version-string.ProductName=\"AI Stack\" --executableName=\"Local AI Interface\"",
     "build-mac": "electron-packager . local-ai-interface --overwrite --platform=darwin --arch=x64,arm64 --out=dist --prune=true --executableName=\"Local AI Interface\"",
     "build-linux": "electron-packager . local-ai-interface --overwrite --platform=linux --arch=x64 --out=dist --prune=true --executableName=\"Local AI Interface\"",
     "build": "electron-packager . local-ai-interface --overwrite --platform=current --arch=current --out=dist --prune=true --executableName=\"Local AI Interface\"",
-
     "build-all-win": "docker compose -p ai-stack up -d && npm run build-windows",
     "build-all-mac": "docker compose -p ai-stack up -d && npm run build-macos",
     "build-all-linux": "docker compose -p ai-stack up -d && npm run build-linux",
@@ -29,8 +27,8 @@
   "license": "MIT",
   "description": "Desktop application built with Electron that provides a user interface for managing AI services like Ollama and n8n.",
   "devDependencies": {
-    "electron": "^37.2.3",
-    "electron-packager": "^17.1.2"
+    "@electron/packager": "^18.3.6",
+    "electron": "^37.2.3"
   },
   "dependencies": {
     "express": "^5.1.0"
