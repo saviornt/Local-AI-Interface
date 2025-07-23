@@ -15,6 +15,9 @@ let currentViewId = null;
 // Log file path in Electron's user data directory
 const logFilePath = path.join(app.getPath('userData'), 'app.log');
 
+// -- Docker Status Check --
+const { exec } = require('child_process');
+
 // Function to log actual errors to a file and console
 function logError(message, error = null) {
   const timestamp = new Date().toISOString();
@@ -170,6 +173,34 @@ app.whenReady().then(() => {
 
     // Serve static files from the Electron app's root directory
     expressApp.use(express.static(path.join(__dirname, '/')));
+
+    // Add Docker status endpoint
+    expressApp.get('/api/docker-status', (req, res) => {
+      exec('docker ps --format "{{.Names}}\t{{.Ports}}"', (error, stdout, stderr) => {
+        if (error) {
+          logError('Error checking Docker status:', error);
+          res.json({ error: 'Failed to check Docker status' });
+          return;
+        }
+
+        const containers = {
+          'ollama': { running: false, port: '11434' },
+          'open-webui': { running: false, port: '8080' },
+          'n8n': { running: false, port: '5678' }
+        };
+
+        stdout.split('\n').forEach(line => {
+          const [name, ports] = line.split('\t');
+          Object.keys(containers).forEach(containerName => {
+            if (name && name.includes(containerName)) {
+              containers[containerName].running = true;
+            }
+          });
+        });
+
+        res.json(containers);
+      });
+    });
 
     // Start the Express server before creating the Electron window
     expressApp.listen(appPort, () => {

@@ -96,6 +96,43 @@
             top: 0;
         }
 
+        .status-indicator {
+            display: inline-block;
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+            margin-right: 8px;
+        }
+
+        .status-running {
+            background-color: #22c55e;
+        }
+
+        .status-stopped {
+            background-color: #ef4444;
+        }
+
+        .docker-status {
+            padding: 20px;
+            max-width: 600px;
+            margin: 0 auto;
+        }
+        
+        .status-item {
+            display: flex;
+            align-items: center;
+            padding: 12px;
+            margin: 8px 0;
+            border-radius: 8px;
+            background-color: #f8fafc;
+            border: 1px solid #e2e8f0;
+        }
+
+        body.dark-mode .status-item {
+            background-color: #1e293b;
+            border-color: #334155;
+        }
+        
         /* No content-container or iframe styles needed here as BrowserView handles it */
 
         .dark-mode-toggle {
@@ -143,14 +180,13 @@
         const { useState, useEffect } = React;
 
         const App = () => {
-            // Initialize darkMode state from localStorage, default to false (light mode)
             const [darkMode, setDarkMode] = useState(() => {
                 const savedMode = localStorage.getItem('darkMode');
                 return savedMode === 'true' ? true : false;
             });
             const [activeTab, setActiveTab] = useState('open-webui');
+            const [dockerStatus, setDockerStatus] = useState({});
 
-            // Effect to apply/remove dark-mode class on body and save preference
             useEffect(() => {
                 if (darkMode) {
                     document.body.classList.add('dark-mode');
@@ -167,18 +203,39 @@
 
             const showTab = (tabId) => {
                 setActiveTab(tabId);
-                // Send IPC message to main process to switch BrowserView
-                if (window.electronAPI && window.electronAPI.switchTab) {
+                if (tabId === 'docker-status') {
+                    // Fetch docker status when switching to the Docker Status tab
+                    fetch('/api/docker-status')
+                        .then(res => res.json())
+                        .then(status => setDockerStatus(status))
+                        .catch(err => console.error('Failed to fetch Docker status:', err));
+                } else if (window.electronAPI && window.electronAPI.switchTab) {
                     window.electronAPI.switchTab(tabId);
                 } else {
                     console.error('Electron API not available or switchTab not exposed.');
                 }
             };
 
-            // Initial tab selection when component mounts
+            // Function to fetch Docker status
+            const fetchDockerStatus = () => {
+                fetch('/api/docker-status')
+                    .then(res => res.json())
+                    .then(status => setDockerStatus(status))
+                    .catch(err => console.error('Failed to fetch Docker status:', err));
+            };
+
             useEffect(() => {
-                showTab('open-webui'); // Show Open-WebUI by default on load
-            }, []); // Run once on mount
+                showTab('open-webui');
+            }, []);
+
+            // Effect for Docker status polling
+            useEffect(() => {
+                if (activeTab === 'docker-status') {
+                    fetchDockerStatus(); // Initial fetch
+                    const interval = setInterval(fetchDockerStatus, 5000); // Refresh every 5 seconds
+                    return () => clearInterval(interval); // Cleanup on unmount or tab change
+                }
+            }, [activeTab]);
 
             return (
                 <>
@@ -195,6 +252,12 @@
                         >
                             n8n
                         </div>
+                        <div
+                            className={`tab ${activeTab === 'docker-status' ? 'active' : ''}`}
+                            onClick={() => showTab('docker-status')}
+                        >
+                            Docker Status
+                        </div>
                         <div className="dark-mode-toggle" onClick={toggleDarkMode}>
                             {/* Single filled sun icon */}
                             <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor">
@@ -210,7 +273,23 @@
                             </svg>
                         </div>
                     </div>
-                    {/* No content-container div here as BrowserView is managed by main process */}
+                    {activeTab === 'docker-status' && (
+                        <div className="docker-status">
+                            <h2 className="text-xl font-bold mb-4">Docker Container Status</h2>
+                            {Object.entries(dockerStatus).map(([name, info]) => (
+                                <div key={name} className="status-item">
+                                    <span className={`status-indicator ${info.running ? 'status-running' : 'status-stopped'}`}></span>
+                                    <span className="font-medium">{name}</span>
+                                    <span className="ml-auto">Port: {info.port}</span>
+                                </div>
+                            ))}
+                            {Object.keys(dockerStatus).length === 0 && (
+                                <div className="text-center text-gray-500 mt-4">
+                                    Loading container status...
+                                </div>
+                            )}
+                        </div>
+                    )}
                 </>
             );
         };

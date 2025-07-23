@@ -118,8 +118,8 @@ These would eitherinvolve API key management and dedicated interfaces within the
 If you find this project useful and would like to support its continued development, please consider donating. While this specific project might seem simple, your contributions are invaluable as they support many other, extremely challenging projects I'm working on. Your generosity is much, much appreciated!
 
 - [GitHub Sponsors: Support me monthly on GitHub.](https://github.com/sponsors/saviornt)
-- [Patreon: Become a patron to support this project and many others.](https://www.patreon.com/saviornt)
-- [Buy Me a Coffee: A simple way to offer a one-time donation to show your appreciation.](https://www.buymeacoffee.com/saviornt)
+- [Patreon: Become a patron to support this project and many others.](https://patreon.com/saviornt?utm_medium=unknown&utm_source=join_link&utm_campaign=creatorshare_creator&utm_content=copyLink)
+- [Buy Me a Coffee: A simple way to offer a one-time donation to show your appreciation.](https://buymeacoffee.com/davidwadswq)
 
 ## Troubleshooting
 
